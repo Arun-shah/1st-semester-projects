@@ -2,7 +2,6 @@
 #include<windows.h>
 	int i,j,k;
 	int sub[10][10],sum[10][10],temp[10][10];
-  
     void input(int input[10][10],int *prow, int *pcol)
     {
    		 for(i = 0; i < *prow; i++)
@@ -111,7 +110,7 @@
         printf("\tNo history found!\n");
         return;
     }
-    printf("\n\t====== MATRIX HISTORY ======\n");
+    printf("\n\t========================================= MATRIX HISTORY =========================================\n");
     while ((ch = fgetc(fptr)) != EOF)
     {
         printf("%c", ch);
@@ -119,6 +118,25 @@
     
     
     fclose(fptr);
+}
+void check(int *num, char name[])
+{
+    int ch;
+    while (1)
+    {
+        printf("\n\tEnter %s (1-20): ", name);
+        if (scanf("%d", num) != 1)
+        {
+            printf("\tInvalid input! Please enter a number.\n");
+            while ((ch = getchar()) != '\n' && ch != EOF);
+            continue;
+        }
+        if (*num >= 1 && *num <= 20)
+        {
+            break;
+        }
+        printf("\t%s must be between 1 and 20.\n", name);
+    }
 }
 int main()
 {
@@ -158,7 +176,7 @@ int main()
 	printf("\n\t4.Transpose");
 	printf("\n\t5.History");
 	printf("\n\t6.Exit");
-	printf("\t");
+	printf("\n\tEnter Your Choice: ");
 	scanf("%d",pchoice);
 
 
@@ -175,10 +193,8 @@ int main()
 	color(2);
 	header();
 	color(7);
-    printf("\tEnter rows: ");
-    scanf("%d", prow);
-    printf("\n\tEnter columns: ");
-    scanf("%d",pcol);
+    check(prow, "rows");
+    check(pcol, "columns");
    	printf("\tEnter elements of Matrix A:\n");
 	input(pa,prow,pcol);
     printf("\tEnter elements of Matrix B:\n");
@@ -200,7 +216,7 @@ int main()
 
     fprintf(fptr, "\tAddition Matrix:\n");
      matrixdisplay(psum,prow,pcol,fptr);
-	fprintf(fptr, "\n\t============================\n");
+	fprintf(fptr, "\n\t======================================================================================================\n");
 
 		break ;
 		}
@@ -209,10 +225,8 @@ int main()
 		color(2);
 		header();
 		color(7);
-	    printf("\tEnter rows: ");
-    	scanf("%d", prow);
-    	printf("\n\tEnter columns: ");
-    	scanf("%d",pcol);
+    	check(prow, "rows");
+	    check(pcol, "columns");
 	    printf("\tEnter elements of Matrix A:\n");
 	    input(pa,prow,pcol);
 	    printf("\tEnter elements of Matrix B:\n");
@@ -231,7 +245,7 @@ int main()
 	    printf("\n\tSubtraction Matrix:\n");
 	    fprintf(fptr, "\tSubtraction Matrix: \n");
 		matrixdisplay(psub,prow,pcol,fptr);
-		fprintf(fptr, "\n\t============================\n");
+		fprintf(fptr, "\n\t======================================================================================================\n");
 
 		break ;
 }
@@ -240,15 +254,11 @@ int main()
 		{
 	color(2);
 	header();
-	color(7);		
-    printf("\tEnter rows  of first matrix: ");
-    scanf("%d", prow);
-    printf("\tEnter olumns of first matrix: ");
-    scanf("%d",pcol);
-    printf("\tEnter rows  of second matrix: ");
-    scanf("%d", prow1);
-    printf("\tEnter columns of second matrix: ");
-    scanf("%d",pcol1);
+	color(7);	    
+    check(prow, "rows of first matrix");
+    check(pcol, "columns of first matrix");  
+    check(prow1, "rows of second matrix");
+    check(pcol1, "columns of second matrix");
 
     // Check condition
     if(*pcol != *prow1)
@@ -280,7 +290,7 @@ int main()
 	fprintf(fptr, "\tMultiplication matrix is:\n");
     matrixdisplay(ptemp,prow,pcol1,fptr);
  
-	fprintf(fptr, "\n\t============================\n");
+	fprintf(fptr, "\n\t======================================================================================================\n");
 
 	break ;
 
@@ -292,10 +302,9 @@ int main()
 		header();
 		color(7);
 
-    printf("\tEnter number of rows: ");
-    scanf("%d", prow);
-    printf("\tEnter number of columns: ");
-    scanf("%d", pcol);
+    
+    check(prow, "rows");
+    check(pcol, "columns");
     printf("\tEnter elements of matrix:\n");
     input(pa,prow,pcol);
     printf("\n\tOriginal Matrix:\n");
@@ -306,15 +315,11 @@ int main()
     printf("\n\tTranspose Matrix:\n");// display result
 	fprintf(fptr, "\tTranspose Matrix:\n");
     matrixdisplay(ptemp,pcol,prow,fptr);
-
-	fprintf(fptr, "\n\t============================\n");
-
+	fprintf(fptr, "\n\t======================================================================================================\n");
 	break ;
-
 		}
 
 	case 5:
-
 	{
 		color(2);
 		header();
@@ -325,24 +330,17 @@ int main()
 
 	case 6:
 		{
-
 			break;
-
 		}
-
-	default:
-	{
-		printf("\tInvalid choice!\n");
-		break;
 	}
-	}
-
       
 	fclose(fptr);	
-
 	
 if(choice!=6)
-	{
+	{ 
+		
+		while (getchar() != '\n');
+		printf("\tInvalid choice! \n");
 		system("pause");
 		goto start;
 	}
