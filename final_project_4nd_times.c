@@ -1,8 +1,9 @@
 #include<stdio.h>
 #include<windows.h>
+#include <time.h>
 	int i,j,k;
-	int sub[10][10],sum[10][10],temp[10][10];
-    void input(int input[10][10],int *prow, int *pcol)
+	int sub[20][20],sum[20][20],temp[20][20];
+    void input(int input[20][20],int *prow,int *pcol)
     {
    		 for(i = 0; i < *prow; i++)
    			{
@@ -13,8 +14,25 @@
  				    }
     		}
 	}
+	void showDateTime()
+{
+    time_t now;
+    struct tm *local;
 
-	void addition(int (*pa)[10], int (*pb)[10], int (*psum)[10],int *prow,int *pcol)
+    now = time(NULL);
+    local = localtime(&now);
+
+    printf("\tDate : %02d-%02d-%d\n",
+           local->tm_mday,
+           local->tm_mon + 1,
+           local->tm_year + 1900);
+
+    printf("\tTime : %02d:%02d\n\n",
+           local->tm_hour,
+           local->tm_min);
+}
+
+	void addition(int (*pa)[20], int (*pb)[20], int (*psum)[20],int *prow,int *pcol)
 		{
 			for(i = 0; i < *prow; i++)
    			{
@@ -25,7 +43,7 @@
     		}		
 		}
 
-	void Subtraction(int (*pa)[10], int (*pb)[10],int (*psub)[10],int *prow, int *pcol)
+	void subtraction(int (*pa)[20], int (*pb)[20],int (*psub)[20],int *prow, int *pcol)
 		{
 			for(i = 0; i < *prow; i++)
    			{
@@ -36,7 +54,7 @@
     		}		
 		}
 
-	void matrixdisplay(int (*ptemp1)[10], int *prow, int *pcol, FILE *fptr)
+	void matrixdisplay(int (*ptemp1)[20], int *prow, int *pcol, FILE *fptr)
 	{
     	for(i = 0; i < *prow; i++)
    			{
@@ -56,7 +74,7 @@
     		}
 	}	
 
-	void multiplication (int (*pa)[10],int (*pb)[10],int *prow,int *pcol,int *pcol1)
+	void multiplication (int (*pa)[20],int (*pb)[20],int *prow,int *pcol,int *pcol1)
 	{
 	// multiplication logic
 	    for(i = 0; i < *prow; i++)
@@ -73,7 +91,7 @@
     	}
 	}
 
-	void transpose(int (*pa)[10],int *prow,int *pcol)
+	void transpose(int (*pa)[20],int *prow,int *pcol)
 	{
 		// transpose
 	    for(i = 0; i < *prow; i++) 
@@ -88,12 +106,12 @@
 	void header()
 {
     system("cls");   // Screen clear
-    printf("\t*======================================*\n");
-    printf("\t||                                     ||\n");
-    printf("\t||   MATRIX OPERATION SYSTEM           ||\n");
-    printf("\t||                                     ||\n");
-    printf("\t*======================================*\n\n");
-
+    printf("\t *======================================*\n");
+    printf("\t||                                      ||\n");
+    printf("\t||    MATRIX OPERATION SYSTEM           ||\n");
+    printf("\t||                                      ||\n");
+    printf("\t *======================================*\n\n");
+	showDateTime();
 }
 
 	void color(int c)
@@ -110,7 +128,7 @@
         printf("\tNo history found!\n");
         return;
     }
-    printf("\n\t========================================= MATRIX HISTORY =========================================\n");
+    printf("\n\t======================= MATRIX HISTORY ======================\n");
     while ((ch = fgetc(fptr)) != EOF)
     {
         printf("%c", ch);
@@ -124,7 +142,7 @@ void check(int *num, char name[])
     int ch;
     while (1)
     {
-        printf("\n\tEnter %s (1-20): ", name);
+        printf("\n\tEnter %s : ", name);
         if (scanf("%d", num) != 1)
         {
             printf("\tInvalid input! Please enter a number.\n");
@@ -138,10 +156,20 @@ void check(int *num, char name[])
         printf("\t%s must be between 1 and 20.\n", name);
     }
 }
+
+void saveDateTime(FILE *fptr)
+{
+    time_t now;
+    time(&now);
+
+    fprintf(fptr, "\n\t=============================================================\n");
+    fprintf(fptr, "\t\tDate & Time: %s	", ctime(&now));
+}
+
 int main()
 {
-	int c,row, col,row1, col1;
-   int a[10][10], b[10][10];
+	int row, col,row1, col1;
+   int a[20][20], b[20][20];
 
 	int choice=0;
 	
@@ -157,11 +185,11 @@ int main()
 	pcol1=&col1;
     pchoice=&choice;
   
-    int (*pa)[10]=a;
-    int (*pb)[10]=b;
-    int (*psum)[10]=sum;
-    int (*ptemp)[10]=temp;
-    int (*psub)[10]=sub;
+    int (*pa)[20]=a;
+    int (*pb)[20]=b;
+    int (*psum)[20]=sum;
+    int (*ptemp)[20]=temp;
+    int (*psub)[20]=sub;
 	
 
 	start:
@@ -202,7 +230,9 @@ int main()
 
 
     addition(pa,pb,psum,prow,pcol); //fuunction call
-
+	saveDateTime(fptr);
+	fprintf(fptr, "\tOperation : Addition\n\n");
+	
     printf("\n\tMatrix A:\n");  //display inputs
     fprintf(fptr, "\n\tMatrix A:\n");
     matrixdisplay(pa,prow,pcol,fptr);
@@ -216,7 +246,7 @@ int main()
 
     fprintf(fptr, "\tAddition Matrix:\n");
      matrixdisplay(psum,prow,pcol,fptr);
-	fprintf(fptr, "\n\t======================================================================================================\n");
+    fprintf(fptr, "\t=============================================================\n");
 
 		break ;
 		}
@@ -233,7 +263,9 @@ int main()
 	    input(pb,prow,pcol);
 
 		//display inputs
-	    Subtraction(pa,pb,psub,prow,pcol);
+	    subtraction(pa,pb,psub,prow,pcol);
+	    saveDateTime(fptr);
+		fprintf(fptr, "\tOperation : Subtraction\n\n");
 	    printf("\n\tMatrix A:\n");
 	    fprintf(fptr, "\n\tMatrix A:\n");
 	    matrixdisplay(pa,prow,pcol,fptr);
@@ -245,8 +277,7 @@ int main()
 	    printf("\n\tSubtraction Matrix:\n");
 	    fprintf(fptr, "\tSubtraction Matrix: \n");
 		matrixdisplay(psub,prow,pcol,fptr);
-		fprintf(fptr, "\n\t======================================================================================================\n");
-
+		fprintf(fptr, "\t=============================================================\n");
 		break ;
 }
 
@@ -265,7 +296,7 @@ int main()
 	{
     printf("\tMatrix multiplication not possible!\n");
     fclose(fptr);
-    return 0;
+    break;
 	}
 
     printf("\tEnter elements of first matrix:\n");
@@ -275,7 +306,9 @@ int main()
 
    //call
 	multiplication(pa,pb, prow, pcol, pcol1);
-
+	saveDateTime(fptr);
+	fprintf(fptr, "\tOperation : Multiplication\n\n");
+	
     // display inputs
     printf("\tmatrix A is\n");
 	fprintf(fptr, "\n\tMatrix A:\n");
@@ -289,8 +322,8 @@ int main()
     printf("\tMultiplication matrix is \n");
 	fprintf(fptr, "\tMultiplication matrix is:\n");
     matrixdisplay(ptemp,prow,pcol1,fptr);
+    fprintf(fptr, "\t=============================================================\n");
  
-	fprintf(fptr, "\n\t======================================================================================================\n");
 
 	break ;
 
@@ -307,6 +340,8 @@ int main()
     check(pcol, "columns");
     printf("\tEnter elements of matrix:\n");
     input(pa,prow,pcol);
+	saveDateTime(fptr);
+	fprintf(fptr, "\tOperation : Transpose\n\n");
     printf("\n\tOriginal Matrix:\n");
 	fprintf(fptr, "\n\tOriginal Matrix:\n");
     matrixdisplay(pa,prow,pcol,fptr);
@@ -315,7 +350,7 @@ int main()
     printf("\n\tTranspose Matrix:\n");// display result
 	fprintf(fptr, "\tTranspose Matrix:\n");
     matrixdisplay(ptemp,pcol,prow,fptr);
-	fprintf(fptr, "\n\t======================================================================================================\n");
+    fprintf(fptr, "\t=============================================================\n");
 	break ;
 		}
 
@@ -330,20 +365,24 @@ int main()
 
 	case 6:
 		{
+			fclose(fptr);
 			break;
 		}
+		default:
+    printf("\n\tInvalid Choice!\n");
 	}
       
-	fclose(fptr);	
-	
-if(choice!=6)
-	{ 
+	fclose(fptr);
 		
-		while (getchar() != '\n');
-		printf("\tInvalid choice! \n");
-		system("pause");
-		goto start;
-	}
+	
+if(choice != 6)
+{
+	printf("\t");
+    system("pause");
+    goto start;
+    
+}
+
 	
 
 	return 0;
